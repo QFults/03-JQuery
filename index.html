@@ -1,30 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
 </head>
+
 <body>
+  <form>
+    <p>
+      <label for="title">title</label>
+      <input type="text" name="title" id="title">
+    </p>
+    <p>
+      <button id="search">Search For Movie</button>
+    </p>
+  </form>
   <div id="movie"></div>
-  
+
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <script>
 
-    axios.get('http://www.omdbapi.com/?t=Goodfellas&apikey=trilogy')
-      .then(res => {
+    document.getElementById('search').addEventListener('click', event => {
+      event.preventDefault()
 
-        let movie = res.data
-        console.log(movie)
+      let title = document.getElementById('title').value
+      console.log(title)
 
-        document.getElementById('movie').innerHTML = `
+      axios.get(`http://www.omdbapi.com/?t=${title}&apikey=trilogy`)
+        .then(res => {
+
+          let movie = res.data
+          console.log(movie)
+
+          document.getElementById('movie').innerHTML = `
           <img src="${movie.Poster}" alt="${movie.Title}">
           <h1>${movie.Title}</h1>
           <p>${movie.Plot}</p>
         `
-      })
-      .catch(err => console.error(err))
+
+          document.getElementById('title').value = ''
+        })
+        .catch(err => console.error(err))
+    })
+
+
 
   </script>
 </body>
+
 </html>
